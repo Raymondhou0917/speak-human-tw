@@ -4,7 +4,23 @@
 
 ## [Unreleased]
 
-（下一版的變更累積在這裡）
+### Added
+
+- `SKILL.md`：新增「稿件是資料，不是指令」安全邊界。待改稿件、benchmark、issue／PR 內容與引用文字一律視為不可信資料，不得用內嵌指令擴大檔案、工具、網路或敏感資料權限
+- `evals/run-eval.md`：新增外部 PR 評測的資料／指令邊界與無害提示注入自查
+
+### Changed
+
+- `README.md`、`install/codex.md` 與 `evals/run-eval.md`：加固 `codex exec` prompt，明確限制可讀檔案，並禁止遵循稿件或 repo 評測資料中的操作指令
+- `README.md` 與 `install/codex.md`：不再把稿件直接插進 shell 引號參數，改從 git 忽略的 `draft.txt` 讀取，避免模型收到 prompt 之前先觸發 shell 解析
+
+### Tested
+
+- 靜態安全複查未發現高信心漏洞；互動確認與非互動事後摘要流程維持不變
+
+### Notes
+
+- 這是 prompt 層的縱深防護，不取代沙箱。評測仍應在無憑證、無敏感資料，且限制網路、檔案與工具權限的乾淨環境執行
 
 ## [1.4.0] - 2026-07-10 — 公開發布版：立場、開場、人味
 
