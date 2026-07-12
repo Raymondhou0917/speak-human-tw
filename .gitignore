@@ -4,8 +4,5 @@ assets/_drafts/
 # 工具產生的暫存目錄
 .playwright-cli/
 
-# Codex 單次使用的本機稿件
-/draft.txt
-
 # macOS
 .DS_Store

@@ -11,8 +11,8 @@
 
 ### Changed
 
-- `README.md`、`install/codex.md` 與 `evals/run-eval.md`：加固 `codex exec` prompt，明確限制可讀檔案，並禁止遵循稿件或 repo 評測資料中的操作指令
-- `README.md` 與 `install/codex.md`：不再把稿件直接插進 shell 引號參數，改從 git 忽略的 `draft.txt` 讀取，避免模型收到 prompt 之前先觸發 shell 解析
+- `README.md`、`install/codex.md` 與 `evals/run-eval.md`：加固 `codex exec` prompt，明確區分稿件／評測資料與操作指令；評測 prompt 另限制可讀檔案與工具範圍
+- `README.md` 與 `install/codex.md`：非互動範例改為直接指定文件路徑，保留原本使用方式，同時明確把文件內容劃為不可信稿件
 
 ### Tested
 
