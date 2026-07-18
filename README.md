@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.4.0-brightgreen.svg)](CHANGELOG.md)
-[![Benchmark](https://img.shields.io/badge/benchmark-40_cases-blue.svg)](evals/benchmark.md)
+[![Benchmark](https://img.shields.io/badge/benchmark-42_cases-blue.svg)](evals/benchmark.md)
 [![zh-TW](https://img.shields.io/badge/zh--TW-Taiwan-e4002b.svg)](references/taiwan-localization.md)
 [![GitHub stars](https://img.shields.io/github/stars/Raymondhou0917/speak-human-tw?style=social)](https://github.com/Raymondhou0917/speak-human-tw/stargazers)
 
@@ -224,11 +224,11 @@ codex exec -C . "讀取 ./SKILL.md，按規則改寫以下文字，這次直接�
 
 ## 評測
 
-[evals/benchmark.md](evals/benchmark.md) 目前 40 條用例：26 條 SF（該改必中）＋ 14 條 SNF（不可誤殺）。SNF 專門保護容易被誤殺的情況：有事實撐著的排比、有來源的數據、金流制式條款、長文節奏句、被討論的 AI 味詞、有選擇條件的「用 A 或用 B」。
+[evals/benchmark.md](evals/benchmark.md) 目前 42 條用例：27 條 SF（該改必中）＋ 15 條 SNF（不可誤殺）。SNF 專門保護容易被誤殺的情況：有事實撐著的排比、有來源的數據、金流制式條款、長文節奏句、被討論的 AI 味詞、有選擇條件的「用 A 或用 B」。
 
 判分含「不換湯」規則：刪掉「標誌著」卻補上「象徵著」，記失敗。跑法見 [evals/run-eval.md](evals/run-eval.md)。
 
-**評測保證什麼、不保證什麼**：這 40 條驗的是「該改的有改到、不該動的沒被動、沒有換湯不換藥、事實一字沒漂」。**沒有任何一條在測「改完更有人味」**——人味沒辦法自動判分，硬要打分數就會變成另一種公式。那部分靠 [humanize.md](references/humanize.md) 的正向目標和你自己的判斷，這個專案不宣稱它可量化。
+**評測保證什麼、不保證什麼**：這 42 條驗的是「該改的有改到、不該動的沒被動、沒有換湯不換藥、事實一字沒漂」。**沒有任何一條在測「改完更有人味」**——人味沒辦法自動判分，硬要打分數就會變成另一種公式。那部分靠 [humanize.md](references/humanize.md) 的正向目標和你自己的判斷，這個專案不宣稱它可量化。
 
 ## 安裝
 
