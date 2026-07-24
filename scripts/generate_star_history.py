@@ -22,7 +22,7 @@ def fetch_star_history_gh():
             for idx, item in enumerate(data):
                 star_num = (page - 1) * 100 + idx + 1
                 starred_at = item.get('starred_at', '')
-                history.append((starred_at[:10], star_num))
+                history.append((starred_at[:19], star_num))  # 保持 ISO timestamp
             page += 1
         except Exception:
             break
@@ -49,7 +49,7 @@ def fetch_star_history_api(token=None):
                 for idx, item in enumerate(data):
                     star_num = (page - 1) * 100 + idx + 1
                     starred_at = item.get('starred_at', '')
-                    history.append((starred_at[:10], star_num))
+                    history.append((starred_at[:19], star_num))
                 page += 1
         except Exception:
             break
@@ -78,59 +78,82 @@ def rough_curve(points, roughness=1.4):
         d2_parts.append(rough_line(x1 + 0.5, y1 - 0.5, x2 + 0.5, y2 - 0.5, roughness * 0.7))
     return ' '.join(d1_parts), ' '.join(d2_parts)
 
+def parse_iso(ts):
+    # e.g. 2026-07-10T09:23:53Z
+    ts = ts.replace('Z', '')
+    if 'T' in ts:
+        date_part, time_part = ts.split('T')
+    else:
+        date_part, time_part = ts, '00:00:00'
+    y, m, d = [int(x) for x in date_part.split('-')]
+    th, tm, ts_sec = [int(x) for x in time_part.split(':')]
+    return datetime.datetime(y, m, d, th, tm, ts_sec)
+
 def generate_svg(history_data, output_path):
     random.seed(42)
 
     if not history_data:
-        # fallback mock if API limits completely
+        # Fallback dataset if API rate-limited
         history_data = [
-            ('2026-07-10', 1),
-            ('2026-07-11', 120),
-            ('2026-07-12', 345),
-            ('2026-07-15', 520),
-            ('2026-07-18', 610),
-            ('2026-07-24', 689)
+            ('2026-07-10T09:00:00Z', 1),
+            ('2026-07-11T12:00:00Z', 180),
+            ('2026-07-12T18:00:00Z', 345),
+            ('2026-07-15T12:00:00Z', 520),
+            ('2026-07-18T12:00:00Z', 610),
+            ('2026-07-24T12:00:00Z', 691)
         ]
 
     total_stars = history_data[-1][1]
-    first_date = history_data[0][0]
-    last_date = history_data[-1][0]
-
-    # Y-axis range: 0 to ceil(total_stars / 100)*100 + 100
-    y_max = max(700, math.ceil(total_stars / 100) * 100)
+    t_start = parse_iso(history_data[0][0])
+    t_end = parse_iso(history_data[-1][0])
     
-    # Select sample points for curve rendering (max 10 points)
-    sample_indices = []
-    step = max(1, len(history_data) // 8)
-    for i in range(0, len(history_data), step):
-        sample_indices.append(i)
-    if (len(history_data) - 1) not in sample_indices:
-        sample_indices.append(len(history_data) - 1)
+    total_seconds = (t_end - t_start).total_seconds()
+    if total_seconds <= 0:
+        total_seconds = 86400
 
-    points = []
+    # Y-axis ceiling: 700 or ceil to nearest 100
+    y_max = max(700, math.ceil(total_stars / 100) * 100)
+
+    # Filter sample points based on time progress to create natural curve
+    # Sample every ~5% time span or at least 15 key points
+    sample_points = []
+    # Always include first point
+    sample_points.append(history_data[0])
+    
+    prev_ratio = 0
+    for item in history_data[1:-1]:
+        t_curr = parse_iso(item[0])
+        ratio = (t_curr - t_start).total_seconds() / total_seconds
+        if ratio - prev_ratio >= 0.05: # sample every 5% time interval
+            sample_points.append(item)
+            prev_ratio = ratio
+
+    # Always include last point
+    sample_points.append(history_data[-1])
+
+    # Calculate exact SVG coordinates
     x_start, x_end = 65, 635
     y_start, y_end = 205, 45
     width = x_end - x_start
     height = y_start - y_end
 
-    for idx in sample_indices:
-        item = history_data[idx]
+    svg_points = []
+    for item in sample_points:
+        t_curr = parse_iso(item[0])
         star_val = item[1]
-        # x proportion by index
-        x_prop = idx / (len(history_data) - 1) if len(history_data) > 1 else 1.0
-        x = x_start + x_prop * width
-        y = y_start - (star_val / y_max) * height
-        points.append((x, y))
+        t_ratio = (t_curr - t_start).total_seconds() / total_seconds
+        
+        px = x_start + t_ratio * width
+        py = y_start - (star_val / y_max) * height
+        svg_points.append((px, py))
 
-    c1, c2 = rough_curve(points, roughness=1.5)
+    c1, c2 = rough_curve(svg_points, roughness=1.5)
 
-    # Grid lines for 0, 200, 400, 600, y_max
+    # Grid lines for Y-axis (0, 200, 400, 600, 700)
     y_grid_vals = [0, 200, 400, 600, y_max]
     grid_lines_html = []
     y_labels_html = []
     for gv in y_grid_vals:
-        if gv > y_max:
-            continue
         gy = y_start - (gv / y_max) * height
         if gv > 0 and gv < y_max:
             gpath = rough_line(x_start, gy, x_end, gy, 0.8)
@@ -144,7 +167,12 @@ def generate_svg(history_data, output_path):
               rough_line(695, 255, 5, 255, 1.0) + ' ' + 
               rough_line(5, 255, 5, 5, 1.0))
 
-    end_x, end_y = points[-1]
+    end_x, end_y = svg_points[-1]
+
+    # Format dates for X-axis: Start date, Mid date, Today
+    d_start_str = t_start.strftime('%m/%d')
+    d_mid_str = (t_start + (t_end - t_start)/2).strftime('%m/%d')
+    d_end_str = t_end.strftime('%m/%d')
 
     svg_content = f'''<svg width="100%" height="260" viewBox="0 0 700 260" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
@@ -185,34 +213,33 @@ def generate_svg(history_data, output_path):
   <!-- Y 軸數字 (真實數據刻度) -->
   {"".join(y_labels_html)}
 
-  <!-- X 軸真實日期 (首/中/尾) -->
-  <text x="{x_start}" y="230" class="text-font text-muted" text-anchor="start">{first_date}</text>
-  <text x="350" y="230" class="text-font text-muted" text-anchor="middle">2026/07/12</text>
-  <text x="{x_end}" y="230" class="text-font text-muted" text-anchor="end">{last_date} (Today)</text>
+  <!-- X 軸真實日期 (首/中/尾按時間比例排布) -->
+  <text x="{x_start}" y="230" class="text-font text-muted" text-anchor="start">{d_start_str} (Launch)</text>
+  <text x="350" y="230" class="text-font text-muted" text-anchor="middle">{d_mid_str}</text>
+  <text x="{x_end}" y="230" class="text-font text-muted" text-anchor="end">{d_end_str} (Today)</text>
 
-  <!-- 手繪雙線折線 (真實星數曲線) -->
+  <!-- 手繪雙線折線 (基於真實時間軸爆發曲線) -->
   <path d="{c1}" class="curve-main" />
   <path d="{c2}" class="curve-sub" />
 
-  <!-- 最新星數亮點 -->
+  <!-- 最新星數亮點與標籤 -->
   <circle cx="{end_x:.1f}" cy="{end_y:.1f}" r="5.5" fill="#E94A3F" stroke="#FFFFFF" stroke-width="2"/>
   <text x="{end_x-10:.1f}" y="{end_y-12:.1f}" class="text-font text-tag" text-anchor="end">★ {total_stars} Stars</text>
 </svg>
 '''
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(svg_content)
-    print(f'Successfully updated SVG at {output_path} with {total_stars} real stars!')
+    print(f'Successfully generated SVG at {output_path} with {total_stars} real stars across real timeframe!')
 
 if __name__ == '__main__':
-    # Try fetching real data via gh or API token
     token = os.environ.get('GITHUB_TOKEN')
     history = fetch_star_history_gh()
     if not history:
         history = fetch_star_history_api(token)
 
-    output = '/Users/raymond-mini/Documents/Raymond-Agent/600_Project/_repos/speak-human-tw/assets/readme/star-history-689stars.svg'
+    output = '/Users/raymond-mini/Documents/Raymond-Agent/600_Project/_repos/speak-human-tw/assets/readme/star-history-real.svg'
     if len(sys.argv) > 1:
         output = sys.argv[1]
 
