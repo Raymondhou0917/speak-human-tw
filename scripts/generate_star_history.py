@@ -212,7 +212,7 @@ if __name__ == '__main__':
     if not history:
         history = fetch_star_history_api(token)
 
-    output = '/Users/raymond-mini/Documents/Raymond-Agent/600_Project/_repos/speak-human-tw/assets/readme/star-history-visual.svg'
+    output = '/Users/raymond-mini/Documents/Raymond-Agent/600_Project/_repos/speak-human-tw/assets/readme/star-history-689stars.svg'
     if len(sys.argv) > 1:
         output = sys.argv[1]
 

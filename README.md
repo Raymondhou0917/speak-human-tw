@@ -271,7 +271,7 @@ codex exec -C . "讀取 ./SKILL.md，按規則改寫以下文字，這次直接�
 ## Star History
 
 <a href="https://star-history.com/#Raymondhou0917/speak-human-tw&Date" target="_blank">
-  <img src="assets/readme/star-history-visual.svg" alt="speak-human-tw Star History Growth Chart" width="100%" />
+  <img src="assets/readme/star-history-689stars.svg" alt="speak-human-tw Star History Growth Chart" width="100%" />
 </a>
 
 ---
