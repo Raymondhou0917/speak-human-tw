@@ -1,0 +1,40 @@
+name: Update Star History SVG
+
+on:
+  schedule:
+    # 每天清晨 00:00 UTC 自動執行更新星數歷史 SVG
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 允許手動觸發執行
+
+permissions:
+  contents: write
+
+jobs:
+  update-svg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate Star History SVG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/generate_star_history.py assets/readme/star-history-visual.svg
+
+      - name: Commit and Push if changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/readme/star-history-visual.svg
+          if git diff --staged --quiet; then
+            echo "No changes in Star History SVG."
+          else
+            git commit -m "chore: 自動更新 Star History 星數成長圖 (GitHub Actions)"
+            git push
+          fi
