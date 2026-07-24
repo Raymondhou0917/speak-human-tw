@@ -268,6 +268,12 @@ codex exec -C . "讀取 ./SKILL.md，按規則改寫以下文字，這次直接�
 「清掉明顯套路」不等於「擁有你的個人聲音」。遇到改完仍不自然的案例，用 [bad case 模板](.github/ISSUE_TEMPLATE/bad-case.md)回報，這比 star 更有用。
 
 
+## Star History
+
+<a href="https://star-history.com/#Raymondhou0917/speak-human-tw&Date" target="_blank">
+  <img src="assets/readme/star-history-visual.svg" alt="speak-human-tw Star History Growth Chart" width="100%" />
+</a>
+
 ---
 
 ## 貢獻
