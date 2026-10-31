@@ -12,6 +12,7 @@
 
 ### Changed
 
+- `install/opencode.md`：改成直接把 repo clone 進 `~/.config/opencode/skills/speak-human-tw`，不再推薦社群打包版 `@jimmyyen/opencode-speak-human-tw`（1.6.6 起少了 `.opencode/plugins/` 與 `.opencode/commands/`，OpenCode 認不到）；補上 Windows 指令、`/speak-human-tw` 指令檔、`opencode debug skill` 驗證、更新方式與舊插件移除步驟（[#8](https://github.com/Raymondhou0917/speak-human-tw/issues/8)）。
 - `references/patterns.md`：補強既有第 20 種，不增加模式總數；名稱擴為「人工戲劇（罐頭式反應鏡頭／戲劇性短句轟炸）」，納入「我愣了一下」「在某處停了一下」「沉默幾秒」「看著螢幕沒說話」等單句變體，並明定採功能判斷、不是禁詞表。
 - `SKILL.md`：單檔兜底同步加入罐頭式反應鏡頭規則；只演情緒且作者未提供的行為預設刪除，不得換成同族句型；作者明確提供且刪掉會損失時間、對話、現場、關係或行動資訊時放行。
 - `evals/run-eval.md`：評測說明與指令同步更新為 42 條（27 SF ＋ 15 SNF）。
@@ -19,6 +20,7 @@
 
 ### Tested
 
+- OpenCode 1.19.5 在隔離的 HOME 逐字執行 `install/opencode.md` 的 macOS 指令：`opencode debug skill` 列出 `speak-human-tw`，`opencode debug config` 註冊 `/speak-human-tw` 指令，`git pull` 更新正常；另確認裝在 `~/.claude/skills/` 時 OpenCode 也讀得到。npm 打包版 1.6.5 與 1.6.6 的檔案清單比對，確認 1.6.6 缺插件檔。Windows 指令未在 Windows 實機跑過。
 - 人工核對 SF-27 的兩種罐頭結構都應刪除、SNF-15 的「我愣了一下」因交代對話中斷與關係變化應原樣放行；未執行完整雙模型評測。
 - 人工核對新列的表格格式與全形標點與既有列一致，替換表列數由 41 增為 42；本次只新增詞表資料，未執行完整雙模型評測。
 
