@@ -297,12 +297,13 @@ codex exec -C . "讀取 ./SKILL.md，按規則改寫以下文字，這次直接�
 
 這個 skill 來自[雷蒙（侯智薰）](https://github.com/Raymondhou0917) 這 3 年多的真實 AI 協作紀錄、寫作模式萃取。我經營「雷蒙三十」，寫數位工作術、AI 應用、一人公司和超級個體的經營模式，這個 skill 本來只是自己用，後來想公開給其他人，花了我好幾個晚上去重新打磨、潤飾和呈現，希望對需要的人有幫助。
 
-► 想認識更多關於我？
+► 想認識更多雷蒙的產品和課程？
 
-- **[生活黑客研究院](https://academy.lifehacker.tw/)**：雷蒙三十的課程站，AI 與數位工作術
-- **[AI Agent 學習資源](https://cc.lifehacker.tw/)**：Claude Code、Codex 的教學與設定包，非工程師也能上手
-- **[免費訂閱雷蒙週報](https://lifehacker.kit.com/ai-agent)**：每週一封，寫 AI Agent 怎麼真的用在工作裡
-- **[雷蒙的個人使用說明書](https://raymondhouch.com/lifehacker/raymond-manual/)**：我做了什麼，快速一頁式認識我
+- **[超級 AI 個體](https://ai.lifehacker.tw/)**：從零打造 AI 分身與 AI 員工，學會把 AI Agent 用在工作中。
+- **[生活黑客研究院](https://academy.lifehacker.tw/)**：雷蒙三十的課程站，AI 與數位工作術。
+- **[AI Agent 學習資源](https://cc.lifehacker.tw/)**：Claude Code、Codex 的教學與設定包，非工程師也能上手。
+- **[免費訂閱雷蒙週報](https://lifehacker.kit.com/ai-agent)**：每週一封，寫 AI Agent 怎麼真的用在工作裡。
+- **[雷蒙的個人使用說明書](https://raymondhouch.com/lifehacker/raymond-manual/)**：我做了什麼，快速一頁式認識我。
 
 也可以在 [Facebook](https://www.facebook.com/raymondhou0917/)、[Instagram](https://www.instagram.com/yuiraymond/)、[Threads](https://www.threads.com/@raymond0917) 上找到我，但最近備課、寫書比較忙，比較少回訊息。
 
